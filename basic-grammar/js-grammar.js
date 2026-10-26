@@ -1,6 +1,7 @@
-strict: true;
+"use strict";
+
 // block scope
-// { 
+// {
 //     let x = 1
 // }
 // console.log(x)
@@ -106,7 +107,6 @@ strict: true;
 // console.log(pop) // [Function: pop]
 // console.log(push) // [Function: push]
 
-
 // spread
 // function myFunction(a, b, c, d) {
 //     return a + b + c + d
@@ -128,7 +128,7 @@ strict: true;
 // typeof
 // return a string that the elavated item belongs to
 // console.log(typeof 100)  // number
-// console.log(typeof 'aaa') // string 
+// console.log(typeof 'aaa') // string
 // let u;
 // console.log(typeof u) // undefined
 // const aaa = null
@@ -148,7 +148,7 @@ strict: true;
 // const s = Symbol.for('symbol')
 // console.log(typeof s) // symbol
 
-// instance of 
+// instance of
 // object instanceof constructor
 // test if constructor.prototype is present in object's prototype chain
 
@@ -189,3 +189,248 @@ strict: true;
 //     2: 30
 // }
 // console.log(Array.prototype.map.call(arrayLike, String));
+
+// // filter
+// function isBigEnough(value) {
+//     return value >= 10
+// }
+// const filtered = [12, 5, 8, 130, 44].filter(isBigEnough)
+// console.log(filtered) // [ 12, 130, 44 ]
+
+// const fruits = ["apple", "banaba", "grapes", "mango", "orange"]
+// function filterItems(arr, query) {
+//     return arr.filter((el) => el.toLowerCase().includes(query.toLowerCase()))
+// }
+// console.log(filterItems(fruits, "BA")) // [ 'banaba' ]
+// console.log(filterItems(fruits, "ap")) // [ 'apple', 'grapes' ]
+
+// // slice
+// const animals = ["ant", "bison", "camel", "duck", "elephant"]
+// console.log(animals.slice(2)) // [ 'camel', 'duck', 'elephant' ]
+// console.log(animals.slice(2, 4)) // [ 'camel', 'duck' ]
+// console.log(animals.slice(1, 5)) // [ 'bison', 'camel', 'duck', 'elephant' ]
+// console.log(animals.slice(-2)) // [ 'duck', 'elephant' ]
+// console.log(animals.slice(2, -1)) // [ 'camel', 'duck' ]
+// console.log(animals.slice()) // [ 'ant', 'bison', 'camel', 'duck', 'elephant' ]
+
+// // concat
+// const array1 = ["a", "b", "c"]
+// const array2 = ["d", "e", "f"]
+// const array3 = array1.concat(array2)
+// console.log(array3)
+
+// const str1 = "abc"
+// const str2 = "def"
+// const str3 = str1.concat(str2)
+// console.log(str3)
+
+// const num1 = [1, 2, 3]
+// const num2 = [4, 5, 6]
+// const num3 = [7, 8, 9]
+// const numbers = num1.concat(num2, num3)
+// console.log(numbers)
+
+// // flat
+// // flat(depth)
+// const arr1 = [0, 1, 2, [3, 4]];
+// console.log(arr1.flat())
+
+// const arr2 = [0, 1, [2, [3, [4, 5]]]]
+// console.log(arr2.flat())
+// console.log(arr2.flat(2))
+// console.log(arr2.flat(Infinity))
+
+// // flatMap
+// // flat(1)
+// const arr = [1, 2, 1]
+// const result = arr.flatMap((number) => number % 2 === 0 ? [number, number] : number)
+// console.log(result)
+
+// // toSorted
+// const months = ["Mar", "Jan", "Feb", "Dec"]
+// const sortedMonths = months.toSorted()
+// console.log(sortedMonths)
+// console.log(months)
+
+// const values = [1, 10, 21, 2]
+// const sortedValues = values.toSorted((a, b) => a - b)
+// console.log(sortedValues) // [ 1, 2, 10, 21 ]
+// const sortedValues2 = values.toSorted((a, b) => b - a);
+// console.log(sortedValues2); // [ 21, 10, 2, 1 ]
+
+// // toReversed
+// const items = [1, 2, 3]
+// console.log(items.toReversed())
+
+// // find
+// // return the first element that satifies the providing test function, otherwise return 'undefined'.
+// const array = [5, 12, 8, 130, 44];
+// const found = array.find((number) => number > 10);
+// console.log(found); // 12
+
+// const found2 = array.find((number) => number > 1000);
+// console.log(found2); // undefined
+
+// // findIndex
+// const foundIndex = array.findIndex((number) => number > 10)
+// console.log(foundIndex) // 1
+// const foundIndex2 = array.findIndex((number) => number > 1000);
+// console.log(foundIndex2); // -1
+
+// // some
+// const foundElement = array.some((element) => element % 2 === 0)
+// console.log(foundElement) // true
+
+// // every
+// const satifiesAll = array.every((element) => element > 10)
+// console.log(satifiesAll) // false
+
+// // includes
+// console.log(array.includes(12)) // true
+// console.log(array.includes(10)) // false
+
+// // indexOf
+// console.log(array.indexOf(8)) // 2
+// console.log(array.indexOf(8, 3)) //  -1
+
+// // at
+// console.log(array.at(2)) // 8
+// console.log(array.at(-2)) // 130
+
+// // reduce
+// const array = [1, 2, 3, 4, 5]
+// const initialValue = 0
+// const sumWithInitial = array.reduce((accumulator, currentValue) => accumulator + currentValue, initialValue)
+// console.log(sumWithInitial) // 15
+
+// console.log([1, 100].reduce((a, b) => Math.max(a, b), 50)) // 100
+
+// // push
+// // push a new element return length of new array
+// const animals = ["pigs", "goats", "sheep"]
+// const count = animals.push("cows")
+// console.log(count) // 4
+// console.log(animals) // [ 'pigs', 'goats', 'sheep', 'cows' ]
+
+// animals.push("chickens", "cats", "dogs")
+// console.log(animals)
+// // [
+// //   'pigs',     'goats',
+// //   'sheep',    'cows',
+// //   'chickens', 'cats',
+// //   'dogs'
+// // ]
+
+// // pop
+// const plants = ["broccoli", "cauliflower", "cabbage", "kale", "tomato"]
+// console.log(plants.pop()) // tomato
+// console.log(plants) // [ 'broccoli', 'cauliflower', 'cabbage', 'kale' ]
+
+// // shift
+// const array = [1, 2, 3]
+// const firstElement = array.shift()
+// console.log(array)
+// console.log(firstElement)
+
+// // unshift
+// const array = [1, 2, 3]
+// console.log(array.unshift(4, 5)) // 5
+// console.log(array) // [ 4, 5, 1, 2, 3 ]
+
+// // splice
+// // splice(start, deleteCount, item1, item2, ..., itemN)
+// // return an array that contains all deleted elements
+// const months = ['Jan', 'March', 'April', 'June'];
+// console.log(months.splice(1, 0, 'Feb')); // []
+// console.log(months); // [ 'Jan', 'Feb', 'March', 'April', 'June' ]
+
+// console.log(months.splice(1, 2, 'May')); // [ 'Feb', 'March' ]
+// console.log(months); // [ 'Jan', 'May', 'April', 'June' ]
+
+// // sort
+// // change the order in palce, return the reference to the same array, now sorted.
+// const months = ["March", "Jan", "Feb", "Dec"]
+// months.sort()
+// console.log(months)
+
+// // reverse
+// // change in place, return the reference to the same array, now reversed.
+// const array = ["one", "two", "three"]
+// console.log("array", array)
+// const reversed = array.reverse()
+// console.log(reversed)  // [ 'three', 'two', 'one' ]
+// console.log(array) //[ 'three', 'two', 'one' ]
+
+// // Object.keys(o)
+// const obj = {
+//     name: "Ray",
+//     ege: "35",
+//     gender: "male",
+//     nationality: "Chinese",
+//     role: "software engineer"
+// }
+// console.log(Object.keys(obj)) // [ 'name', 'ege', 'gender', 'nationality', 'role' ]
+// console.log(Object.values(obj)) // [ 'Ray', '35', 'male', 'Chinese', 'software engineer' ]
+// console.log(Object.entries(obj))
+// // [
+// //   [ 'name', 'Ray' ],
+// //   [ 'ege', '35' ],
+// //   [ 'gender', 'male' ],
+// //   [ 'nationality', 'Chinese' ],
+// //   [ 'role', 'software engineer' ]
+// // ]
+// const entries = Object.entries(obj)
+// console.log(Object.fromEntries(entries))
+
+
+// // Object.assign()
+// const target = { a: 1, b: 2 }
+// const source = { b: 4, c: 5 }
+// // const returnedTarget = Object.assign(target, source)
+// // console.log(target) //  { a: 1, b: 4, c: 5 }
+// // console.log(returnedTarget === target) // true
+// const returnedTarget2 = { ...target, ...source }
+// console.log(returnedTarget2)
+
+// // Object.freeze()
+// const obj = {
+//     prop: 42
+// }
+// Object.freeze(obj)
+
+// // obj.prop = 43 // error
+// console.log(obj.prop)
+
+// // Object.hasOwn()
+// // return ture if the property is its own, not inherited
+// const object = {
+//     prop: "exists"
+// }
+// console.log(Object.hasOwn(object, "prop")) // true
+// console.log(Object.hasOwn(object, "toString")) // false
+// console.log(Object.hasOwn(object, "undeclaredPropertyValue")) // false
+
+// // JSON.parse()
+// // parse a string to an object
+// const json = '{"result":true,"count":42}'
+// const obj = JSON.parse(json)
+// console.log(typeof obj)
+// console.log(obj)
+
+// // JSON.stringify()
+// console.log(JSON.stringify({x: 5, y: 6}))
+
+// // map
+// const map = new Map()
+// map.set("a", 1)
+// map.set("b", 2)
+// map.set("c", 3)
+// console.log(map.get("a")) // 1
+// console.log(map.has("b")) // true
+// console.log(map.size) // 3
+// map.delete("c")
+// console.log(map.size) // 2
+
+// set
+const set = new Set([1, 1, 2, 3])
+console.log(set) // Set(3) { 1, 2, 3 }
