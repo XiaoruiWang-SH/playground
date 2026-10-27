@@ -1,4 +1,4 @@
-"use strict";
+'use strict';
 
 // block scope
 // {
@@ -382,7 +382,6 @@
 // const entries = Object.entries(obj)
 // console.log(Object.fromEntries(entries))
 
-
 // // Object.assign()
 // const target = { a: 1, b: 2 }
 // const source = { b: 4, c: 5 }
@@ -431,6 +430,203 @@
 // map.delete("c")
 // console.log(map.size) // 2
 
-// set
-const set = new Set([1, 1, 2, 3])
-console.log(set) // Set(3) { 1, 2, 3 }
+// // set
+// const set = new Set([1, 1, 2, 3])
+// console.log(set) // Set(3) { 1, 2, 3 }
+
+// // promise
+// const myPromise = new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//         // resolve("foo")
+//         reject("error")
+//     }, 1000)
+// })
+// myPromise.then((value) => {
+//     console.log(value)
+// }).catch((reason) => {
+//     console.error(reason)
+// }).finally(() => {
+//     console.log("promise finally")
+// })
+
+// try {
+//     const result = await myPromise;
+//     console.log(result)
+// } catch (error) {
+//     console.log(error)
+// } finally {
+//     console.log('promise finally');
+// }
+
+// // async && await
+// async function myAsyncFunction() {
+//     return new Promise((resolve, reject) => {
+//         setTimeout(() => {
+//             // resolve("foo")
+//             reject("error")
+//         }, 1000)
+//     })
+// }
+// try {
+//     const result = await myAsyncFunction();
+//     console.log(result)
+// } catch (err) {
+//     console.error(err)
+// }
+
+// // promise.all()
+// // wait an array of promise's results, but once upon a reject, promise.all will immediately reject
+// const promise1 = Promise.resolve(3);
+// // const promise1 = Promise.reject(3);
+// const promise2 = 42;
+// const promise3 = new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//         resolve(36);
+//     }, 1000)
+// })
+// const promise4 = async function myAsyncFunction() {
+//     return new Promise((resolve, reject) => {
+//         setTimeout(() => {
+//             resolve(49)
+//         }, 3000);
+//     })
+// }
+// Promise.all([promise1, promise2, promise3, promise4()]).then((value) => {
+//     console.log(value)
+// }).catch((reason) => {
+//     console.error(reason)
+// })
+
+// // promise.allSettled()
+// // wait all promise's results in an array, no matter if a reject happen, return an array of promises
+// const promise1 = Promise.resolve(3);
+// // const promise1 = Promise.reject(3);
+// const promise2 = 42;
+// const promise3 = new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//         // resolve(36);
+//         reject(36)
+//     }, 1000)
+// })
+
+// Promise.allSettled([promise1, promise2, promise3]).then((value) => {
+//     // console.log(value)
+//     for (const element of value) {
+//         switch (element.status) {
+//             case 'fulfilled':
+//                 console.log("fulfilled", element.value)
+//                 break;
+//             case 'rejected':
+//                 console.log('rejected', element.value);
+//                 break;
+//         }
+//     }
+// }).catch((reason) => {
+//     console.error(reason)
+// })
+
+// // promise.race()
+// // return the first completion promise, don't care about it's succeed or failed
+// const promise1 = new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//         // resolve(36);
+//         reject(36)
+//     }, 1000)
+// })
+// const promise2 = new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//         resolve(48)
+//     }, 2000);
+// })
+// Promise.race([promise1, promise2]).then((value) => {
+//     console.log(value)
+// }).catch((err) => {
+//     console.error(err) // 36
+// })
+
+// // promise.any()
+// // return the first fulfilled promise
+// const promise1 = new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//         // resolve(36);
+//         reject(36)
+//     }, 1000)
+// })
+// const promise2 = new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//         resolve(48)
+//     }, 2000);
+// })
+// Promise.any([promise1, promise2]).then((value) => {
+//     console.log(value) // 48
+// }).catch((err) => {
+//     console.error(err)
+// })
+
+// async function f(i) {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       resolve(i);
+//     }, 1000);
+//   });
+// }
+// const numbers = [1, 2, 3];
+
+// // serial 
+// // for (const x of numbers) {
+// //   const result = await f(x);
+// //   console.log(result);
+// // } 
+
+// // parallel
+// const results = await Promise.all(numbers.map((x) => f(x)));
+// for (const result of results) {
+//   console.log(result);
+// }
+
+// // fetch
+// try {
+//     const response = await fetch('https://baidu.com');
+//     if (!response.ok) {
+//         throw new Error("fetch error")
+//     }
+//     const result = await response.json()
+//     console.log(result)
+// } catch (err) {
+//     console.error(err)
+// }
+
+// // abort
+// const abortController = new AbortController()
+// try {
+//     const response = await fetch('https://baidudd.com', {
+//         signal: abortController
+//     });
+//     if (!response.ok) {
+//         throw new Error("fetch error")
+//     }
+//     const result = await response.json()
+//     console.log(result)
+// } catch (err) {
+//     console.error("err: ",err)
+// }
+
+// setTimeout(() => {
+//     abortController.abort()
+// }, 1000);
+
+// // setTimeout && clearTimeout
+// const id = setTimeout(() => {
+//     console.log("executed")
+// }, 1000);
+
+// clearTimeout(id)
+
+// setInterval && clearInterval
+const id = setInterval(() => {
+    console.log('executed');
+}, 1000);
+setTimeout(() => {
+    clearInterval(id)
+}, 3000);
+
