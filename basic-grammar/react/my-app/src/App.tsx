@@ -1,16 +1,19 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
-import { Greeting } from './Greeting'
-import User from './User'
-import type { Todo } from './TodoList'
-import { TodoList } from './TodoList'
-import { WindowWidth } from './WindowWidth'
+import { useState } from 'react';
+import heroImg from './assets/hero.png';
+import reactLogo from './assets/react.svg';
+import viteLogo from './assets/vite.svg';
+import './App.css';
+import { Greeting } from './Greeting';
+import User from './User';
+import type { Todo } from './TodoList';
+import { TodoList } from './TodoList';
+import { WindowWidth } from './WindowWidth';
+import { Parent } from './Parent';
+import { MemoComponent } from './MemoComponent';
+import { UseCallbackComponent } from './UseCallbackComponent';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(0);
   const todos: Todo[] = [
     {
       id: 123456,
@@ -54,6 +57,9 @@ function App() {
         <User />
         <TodoList todos={todos} />
         <WindowWidth />
+        <Parent />
+        <MemoComponent />
+        <UseCallbackComponent />
       </section>
 
       <div className="ticks"></div>
@@ -145,4 +151,4 @@ function App() {
   );
 }
 
-export default App
+export default App;

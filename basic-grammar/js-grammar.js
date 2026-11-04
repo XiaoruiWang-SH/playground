@@ -623,10 +623,28 @@
 // clearTimeout(id)
 
 // setInterval && clearInterval
-const id = setInterval(() => {
-    console.log('executed');
-}, 1000);
-setTimeout(() => {
-    clearInterval(id)
-}, 3000);
+// const id = setInterval(() => {
+//     console.log('executed');
+// }, 1000);
+// setTimeout(() => {
+//     clearInterval(id)
+// }, 3000);
+
+const a = {
+    name: "hello",
+    id: 123456,
+}
+const b = {
+  name: 'hello',
+  id: 123456,
+};
+console.log(a == b)
+console.log(a === b)
+console.log(Object.is(a, b))
+
+console.log(+0 === -0)
+console.log(NaN === NaN)
+console.log(Object.is(+0, -0))
+console.log(Object.is(NaN, NaN))
+
 
