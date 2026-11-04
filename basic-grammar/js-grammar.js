@@ -1,5 +1,7 @@
 'use strict';
 
+const { fileNameToDocumentURI } = require('typescript/unstable/sync');
+
 // block scope
 // {
 //     let x = 1
@@ -572,11 +574,11 @@
 // }
 // const numbers = [1, 2, 3];
 
-// // serial 
+// // serial
 // // for (const x of numbers) {
 // //   const result = await f(x);
 // //   console.log(result);
-// // } 
+// // }
 
 // // parallel
 // const results = await Promise.all(numbers.map((x) => f(x)));
@@ -630,21 +632,93 @@
 //     clearInterval(id)
 // }, 3000);
 
-const a = {
-    name: "hello",
-    id: 123456,
+// const a = {
+//     name: "hello",
+//     id: 123456,
+// }
+// const b = {
+//   name: 'hello',
+//   id: 123456,
+// };
+// console.log(a == b)
+// console.log(a === b)
+// console.log(Object.is(a, b))
+
+// console.log(+0 === -0)
+// console.log(NaN === NaN)
+// console.log(Object.is(+0, -0))
+// console.log(Object.is(NaN, NaN))
+
+// function outer() {
+//     let count = 0;
+//     function inner() {
+//         console.log("count: ", count);
+//     }
+//     const interval = setInterval(() => {
+//         inner();
+//     }, 1000);
+
+//     return function () {
+//         clearInterval(interval);
+//     }
+// }
+
+// const clear = outer();
+// setTimeout(() => {
+//     clear();
+// }, 5000);
+
+function debounce(fn, delay) {
+  let timer;
+  return function (...args) {
+    if (timer !== undefined) {
+      clearTimeout(timer);
+    }
+    timer = setTimeout(() => {
+      fn(...args);
+    }, delay);
+  };
 }
-const b = {
-  name: 'hello',
-  id: 123456,
-};
-console.log(a == b)
-console.log(a === b)
-console.log(Object.is(a, b))
 
-console.log(+0 === -0)
-console.log(NaN === NaN)
-console.log(Object.is(+0, -0))
-console.log(Object.is(NaN, NaN))
+function throttle(fn, delay) {
+  let time;
+  return function (...args) {
+    if (time === undefined || time < Date.now()) {
+      fn(...args);
+      time = Date.now() + delay;
+    }
+  };
+}
 
+function printlog(a, b) {
+  console.log(`debounce a is ${a}, b is ${b}`);
+}
+const debouncedPrintlog = debounce(printlog, 1000);
+// debouncedPrintlog(1, 2);
+// setTimeout(() => {
+//   debouncedPrintlog(10, 20);
+// }, 100);
+// setTimeout(() => {
+//   debouncedPrintlog(100, 200);
+// }, 2000);
+// setTimeout(() => {
+//   debouncedPrintlog(1000, 2000);
+// }, 5000);
+// setTimeout(() => {
+//   debouncedPrintlog(10000, 20000);
+// }, 5500);
 
+const throttledPrintlog = throttle(printlog, 1000);
+throttledPrintlog(1, 2);
+setTimeout(() => {
+  throttledPrintlog(10, 20);
+}, 100);
+setTimeout(() => {
+  throttledPrintlog(100, 200);
+}, 2000);
+setTimeout(() => {
+  throttledPrintlog(1000, 2000);
+}, 5000);
+setTimeout(() => {
+  throttledPrintlog(10000, 20000);
+}, 5500);
