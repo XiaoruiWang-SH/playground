@@ -668,57 +668,103 @@ const { fileNameToDocumentURI } = require('typescript/unstable/sync');
 //     clear();
 // }, 5000);
 
-function debounce(fn, delay) {
-  let timer;
-  return function (...args) {
-    if (timer !== undefined) {
-      clearTimeout(timer);
-    }
-    timer = setTimeout(() => {
-      fn(...args);
-    }, delay);
-  };
-}
+// function debounce(fn, delay) {
+//   let timer;
+//   return function (...args) {
+//     if (timer !== undefined) {
+//       clearTimeout(timer);
+//     }
+//     timer = setTimeout(() => {
+//       fn(...args);
+//     }, delay);
+//   };
+// }
 
-function throttle(fn, delay) {
-  let time;
-  return function (...args) {
-    if (time === undefined || time < Date.now()) {
-      fn(...args);
-      time = Date.now() + delay;
-    }
-  };
-}
+// function throttle(fn, delay) {
+//   let time;
+//   return function (...args) {
+//     if (time === undefined || time < Date.now()) {
+//       fn(...args);
+//       time = Date.now() + delay;
+//     }
+//   };
+// }
 
-function printlog(a, b) {
-  console.log(`debounce a is ${a}, b is ${b}`);
-}
-const debouncedPrintlog = debounce(printlog, 1000);
-// debouncedPrintlog(1, 2);
+// function printlog(a, b) {
+//   console.log(`debounce a is ${a}, b is ${b}`);
+// }
+// const debouncedPrintlog = debounce(printlog, 1000);
+// // debouncedPrintlog(1, 2);
+// // setTimeout(() => {
+// //   debouncedPrintlog(10, 20);
+// // }, 100);
+// // setTimeout(() => {
+// //   debouncedPrintlog(100, 200);
+// // }, 2000);
+// // setTimeout(() => {
+// //   debouncedPrintlog(1000, 2000);
+// // }, 5000);
+// // setTimeout(() => {
+// //   debouncedPrintlog(10000, 20000);
+// // }, 5500);
+
+// const throttledPrintlog = throttle(printlog, 1000);
+// throttledPrintlog(1, 2);
 // setTimeout(() => {
-//   debouncedPrintlog(10, 20);
+//   throttledPrintlog(10, 20);
 // }, 100);
 // setTimeout(() => {
-//   debouncedPrintlog(100, 200);
+//   throttledPrintlog(100, 200);
 // }, 2000);
 // setTimeout(() => {
-//   debouncedPrintlog(1000, 2000);
+//   throttledPrintlog(1000, 2000);
 // }, 5000);
 // setTimeout(() => {
-//   debouncedPrintlog(10000, 20000);
+//   throttledPrintlog(10000, 20000);
 // }, 5500);
 
-const throttledPrintlog = throttle(printlog, 1000);
-throttledPrintlog(1, 2);
-setTimeout(() => {
-  throttledPrintlog(10, 20);
-}, 100);
-setTimeout(() => {
-  throttledPrintlog(100, 200);
-}, 2000);
-setTimeout(() => {
-  throttledPrintlog(1000, 2000);
-}, 5000);
-setTimeout(() => {
-  throttledPrintlog(10000, 20000);
-}, 5500);
+// this binding
+// function greeting() {
+//     console.log(this);
+// }
+// greeting();
+
+// const user = {
+//   name: 'Alex',
+//   foo() {
+//     // function bar() {
+//     //     console.log(this); // undefined
+//     // }
+//     const bar = () => {
+//       console.log(this.name); // Alex
+//     };
+//     bar();
+//   },
+// };
+// user.foo();
+
+// const user = {
+//   name: 'Alex',
+//   foo() {
+//     console.log(this.name);
+//   },
+// };
+// // user.foo();
+// const fn1 = user.foo; // undefined
+// const fn2 = user.foo.bind(user); // Alex
+// const fn3 = () => {
+//   user.foo();
+// };
+// // fn1();
+// fn2();
+// fn3();
+
+// thisArg
+const user = {
+  name: 'Alex',
+};
+console.log(
+  ['1', '2', '3'].map(function (e) {
+    return e + this.name;
+  }, user),
+); // [ '1Alex', '2Alex', '3Alex' ]
