@@ -1,5 +1,6 @@
 'use strict';
 
+const { computeLineStarts } = require('typescript/unstable/ast');
 const { fileNameToDocumentURI } = require('typescript/unstable/sync');
 
 // block scope
@@ -760,11 +761,113 @@ const { fileNameToDocumentURI } = require('typescript/unstable/sync');
 // fn3();
 
 // thisArg
-const user = {
-  name: 'Alex',
-};
-console.log(
-  ['1', '2', '3'].map(function (e) {
-    return e + this.name;
-  }, user),
-); // [ '1Alex', '2Alex', '3Alex' ]
+// const user = {
+//   name: 'Alex',
+// };
+// console.log(
+//   ['1', '2', '3'].map(function (e) {
+//     return e + this.name;
+//   }, user),
+// ); // [ '1Alex', '2Alex', '3Alex' ]
+
+// // conversion
+// const user = {
+//   name: "Alex",
+//   toString() {
+//     return this.name;
+//   }
+// }
+// console.log(String(user));
+// console.log(user.toString());
+
+// class User {
+//   #name;
+//   #password;
+
+//   constructor(name, password) {
+//     this.#name = name;
+//     this.#password = password;
+//   }
+
+//   getName() {
+//     return this.#name;
+//   }
+
+//   verifyPassword(password) {
+//     return this.#password === password;
+//   }
+// }
+
+// const user = new User("Alice", "123456");
+// console.log(user.getName());
+// // console.log(user.#password) // syntaxError
+
+// proxy
+// const user = {
+//   name: "Tom",
+//   age: 25
+// }
+
+// const proxy = new Proxy(user, {
+//   get(target, property) {
+//     console.log(`正在读取属性：${property}`);
+//     return target[property]
+//   }
+// });
+
+// console.log(proxy.name);
+
+// const user = {
+//   firstName: "Alice",
+//   get fullName() {
+//     return this.firstName;
+//   }
+// };
+
+// const proxy = new Proxy(user, {
+//   get(target, proterty, receiver) {
+//     if (proterty === "firstName") {
+//       return "Bob";
+//     }
+//     // return Reflect.get(target, proterty, receiver);
+//     return target[proterty];
+//   }
+// });
+
+// console.log(proxy.firstName); // Bob
+// console.log(proxy.fullName) // Bob
+
+// // console.log(user.firstName); // Alice
+// // console.log(user.fullName); // Alice
+
+// event loop
+// console.log("A")
+// setTimeout(() => {
+//   console.log("B");
+// }, 0);
+// Promise.resolve().then(() => {
+//   console.log("C");
+// })
+// console.log("D");
+// A;
+// D;
+// C;
+// B;
+
+console.log('A');
+Promise.resolve().then(() => {
+  console.log('B');
+  Promise.resolve().then(() => {
+    console.log('C');
+  });
+});
+
+Promise.resolve().then(() => {
+  console.log('D');
+});
+console.log('E');
+// A;
+// E;
+// B;
+// D;
+// C;
