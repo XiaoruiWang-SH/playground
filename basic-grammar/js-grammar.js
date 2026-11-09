@@ -854,20 +854,104 @@ const { fileNameToDocumentURI } = require('typescript/unstable/sync');
 // C;
 // B;
 
-console.log('A');
-Promise.resolve().then(() => {
-  console.log('B');
-  Promise.resolve().then(() => {
-    console.log('C');
-  });
+// console.log('A');
+// Promise.resolve().then(() => {
+//   console.log('B');
+//   Promise.resolve().then(() => {
+//     console.log('C');
+//   });
+// });
+
+// Promise.resolve().then(() => {
+//   console.log('D');
+// });
+// console.log('E');
+// // A;
+// // E;
+// // B;
+// // D;
+// // C;
+
+// Promise
+// const promise = new Promise((resolve) => {
+//   console.log("hello");
+// });
+// console.log("After promise");
+
+// console.log("1");
+// const promise = new Promise((resolve) => {
+//   console.log("2");
+//   resolve("success");
+//   console.log("3");
+// });
+// console.log("4");
+// promise.then((value) => {
+//   console.log(`5 ${value}`);
+// });
+// console.log("6");
+// // 1
+// // 2
+// // 3
+// // 4
+// // 6
+// // 5 success
+
+// async function test() {
+//   console.log('A');
+//   // await Promise.resolve();
+//   await new Promise((resolve) => {
+//     resolve();
+//   });
+//   console.log('B');
+// }
+// test();
+// console.log('C');
+// // A;
+// // C;
+// // B;
+
+console.log('1');
+
+const p = new Promise((resolve) => {
+  console.log('2');
+  resolve('A');
+  console.log('3');
 });
 
-Promise.resolve().then(() => {
-  console.log('D');
+p.then((value) => {
+  console.log('4', value);
+
+  return 'B';
+}).then((value) => {
+  console.log('5', value);
 });
-console.log('E');
-// A;
-// E;
-// B;
-// D;
-// C;
+
+async function test() {
+  console.log('6');
+
+  await Promise.resolve('C');
+
+  console.log('7');
+
+  await Promise.resolve('D');
+
+  console.log('8');
+}
+
+test();
+
+Promise.resolve().then(() => {
+  console.log('9');
+});
+
+console.log('10');
+// 1
+// 2
+// 3
+// 6
+// 10
+// 4 A
+// 7
+// 9
+// 5 B
+// 8
