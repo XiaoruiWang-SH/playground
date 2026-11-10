@@ -910,48 +910,164 @@ const { fileNameToDocumentURI } = require('typescript/unstable/sync');
 // // C;
 // // B;
 
-console.log('1');
+// console.log('1');
 
-const p = new Promise((resolve) => {
-  console.log('2');
-  resolve('A');
-  console.log('3');
+// const p = new Promise((resolve) => {
+//   console.log('2');
+//   resolve('A');
+//   console.log('3');
+// });
+
+// p.then((value) => {
+//   console.log('4', value);
+
+//   return 'B';
+// }).then((value) => {
+//   console.log('5', value);
+// });
+
+// async function test() {
+//   console.log('6');
+
+//   await Promise.resolve('C');
+
+//   console.log('7');
+
+//   await Promise.resolve('D');
+
+//   console.log('8');
+// }
+
+// test();
+
+// Promise.resolve().then(() => {
+//   console.log('9');
+// });
+
+// console.log('10');
+// // 1
+// // 2
+// // 3
+// // 6
+// // 10
+// // 4 A
+// // 7
+// // 9
+// // 5 B
+// // 8
+
+// setTimeout(() => {
+//   console.log("Time out");
+// }, 0);
+// setImmediate(() => {
+//   console.log("Immediate");
+// });
+// the order is not fixed, it depends on which phase we're in right now.
+
+// const fs = require('node:fs');
+// fs.readFile('./data.txt', 'utf8', (err, data) => {
+//   if (err) {
+//     console.error(err);
+//     return;
+//   }
+//   console.log(data);
+//   setTimeout(() => {
+//     console.log('Time out');
+//   }, 0);
+//   setImmediate(() => {
+//     console.log('Immediate');
+//   });
+// });
+// // hello world!
+// // Immediate
+// // Time out
+// // the order is fixed, after poll phase is check phase.
+
+// const fs = require('node:fs');
+
+// console.log('1');
+
+// setTimeout(() => {
+//   console.log('2');
+// }, 0);
+
+// setImmediate(() => {
+//   console.log('3');
+// });
+
+// process.nextTick(() => {
+//   console.log('4');
+// });
+
+// Promise.resolve().then(() => {
+//   console.log('5');
+// });
+
+// queueMicrotask(() => {
+//   console.log('6');
+// });
+
+// fs.readFile('./data.txt', () => {
+//   console.log('7');
+
+//   process.nextTick(() => {
+//     console.log('8');
+//   });
+
+//   Promise.resolve().then(() => {
+//     console.log('9');
+//   });
+
+//   setImmediate(() => {
+//     console.log('10');
+//   });
+// });
+
+// console.log('11');
+// // 11;
+// // 4;
+// // 5;
+// // 6;
+// // 3;
+// // 2;
+// // 7;
+// // 8;
+// // 9;
+// // 10;
+
+console.log('script start');
+
+process.nextTick(() => {
+  console.log('nextTick 1');
+
+  process.nextTick(() => {
+    console.log('nextTick 2');
+  });
+
+  Promise.resolve().then(() => {
+    console.log('Promise inside nextTick');
+  });
 });
-
-p.then((value) => {
-  console.log('4', value);
-
-  return 'B';
-}).then((value) => {
-  console.log('5', value);
-});
-
-async function test() {
-  console.log('6');
-
-  await Promise.resolve('C');
-
-  console.log('7');
-
-  await Promise.resolve('D');
-
-  console.log('8');
-}
-
-test();
 
 Promise.resolve().then(() => {
-  console.log('9');
+  console.log('Promise 1');
+
+  process.nextTick(() => {
+    console.log('nextTick inside Promise');
+  });
+
+  Promise.resolve().then(() => {
+    console.log('Promise 2');
+  });
 });
 
-console.log('10');
-// 1
-// 2
-// 3
-// 6
-// 10
-// 4 A
-// 7
-// 9
-// 5 B
-// 8
+console.log('script end');
+
+// script start
+// script end
+// nextTick 1
+// nextTick 2
+// Promise 1
+// Promise inside nextTick
+// Promise 2
+// nextTick inside Promise
