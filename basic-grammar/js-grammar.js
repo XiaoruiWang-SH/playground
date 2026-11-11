@@ -1,7 +1,7 @@
 'use strict';
 
-const { computeLineStarts } = require('typescript/unstable/ast');
-const { fileNameToDocumentURI } = require('typescript/unstable/sync');
+// const { computeLineStarts } = require('typescript/unstable/ast');
+// const { fileNameToDocumentURI } = require('typescript/unstable/sync');
 
 // block scope
 // {
@@ -1035,39 +1035,231 @@ const { fileNameToDocumentURI } = require('typescript/unstable/sync');
 // // 9;
 // // 10;
 
-console.log('script start');
+// console.log('script start');
 
-process.nextTick(() => {
-  console.log('nextTick 1');
+// process.nextTick(() => {
+//   console.log('nextTick 1');
 
-  process.nextTick(() => {
-    console.log('nextTick 2');
+//   process.nextTick(() => {
+//     console.log('nextTick 2');
+//   });
+
+//   Promise.resolve().then(() => {
+//     console.log('Promise inside nextTick');
+//   });
+// });
+
+// Promise.resolve().then(() => {
+//   console.log('Promise 1');
+
+//   process.nextTick(() => {
+//     console.log('nextTick inside Promise');
+//   });
+
+//   Promise.resolve().then(() => {
+//     console.log('Promise 2');
+//   });
+// });
+
+// console.log('script end');
+
+// // script start
+// // script end
+// // nextTick 1
+// // nextTick 2
+// // Promise 1
+// // Promise inside nextTick
+// // Promise 2
+// // nextTick inside Promise
+
+function callbackFn(callback) {
+  setTimeout(() => {
+    callback(null, 'hello world');
+  }, 1000);
+}
+
+// callbackFn((value) => {
+//   console.log(value);
+// });
+
+// function promisify() {
+//   return new Promise((resolve, reject) => {
+//     callbackFn((value) => {
+//       resolve(value);
+//     });
+//   });
+// }
+
+// // promisify().then((value) => {
+// //   console.log(value);
+// // });
+
+// async function print() {
+//   const result = await promisify();
+//   console.log(result);
+// }
+// print();
+
+// function promisify(fn) {
+//   return function (...args) {
+//     return new Promise((resolve, reject) => {
+//       fn.call(this, ...args, (error, result) => {
+//         if (error) {
+//           reject(error);
+//         } else {
+//           resolve(result);
+//         }
+//       });
+//     });
+//   };
+// }
+
+// const fn1 = promisify(callbackFn);
+// // const callback = (value) => {
+// //   console.log(value);
+// // };
+// fn1()
+//   .then((value) => {
+//     console.log('resolve: ', value);
+//   })
+//   .catch((error) => {
+//     console.error('reject: ', error);
+//   });
+
+// console.log(Array.from({ length: 5 }, (_, i) => i));
+
+// promise pool
+async function promisePool(tasks, concurrency) {
+  const results = Array.from({ length: tasks.length });
+  let currentIndex = 0;
+  async function worker() {
+    while (true) {
+      if (currentIndex >= tasks.length) {
+        return;
+      }
+      const taskIndex = currentIndex++;
+      const result = await tasks[taskIndex]();
+      // results.push(result); // 无法保证顺序
+      results[taskIndex] = result;
+    }
+  }
+  const workCount = Math.min(tasks.length, concurrency);
+  await Promise.all(Array.from({ length: workCount }, () => worker()));
+  return results;
+}
+
+const promise1 = () =>
+  new Promise((resolve, _) => {
+    console.log(`Task 1 started`);
+    setTimeout(() => {
+      resolve(1);
+      console.log(`Task 1 completed`);
+    }, 100);
   });
 
-  Promise.resolve().then(() => {
-    console.log('Promise inside nextTick');
+const promise2 = () =>
+  new Promise((resolve, _) => {
+    console.log(`Task 2 started`);
+    setTimeout(() => {
+      resolve(2);
+      console.log(`Task 2 completed`);
+    }, 200);
   });
+const promise3 = () =>
+  new Promise((resolve, _) => {
+    console.log(`Task 3 started`);
+    setTimeout(() => {
+      resolve(3);
+      console.log(`Task 3 completed`);
+    }, 500);
+  });
+const promise4 = () =>
+  new Promise((resolve, _) => {
+    console.log(`Task 4 started`);
+    setTimeout(() => {
+      resolve(4);
+      console.log(`Task 4 completed`);
+    }, 50);
+  });
+const promise5 = () =>
+  new Promise((resolve, _) => {
+    console.log(`Task 5 started`);
+    setTimeout(() => {
+      resolve(5);
+      console.log(`Task 5 completed`);
+    }, 1000);
+  });
+const promise6 = () =>
+  new Promise((resolve, _) => {
+    console.log(`Task 6 started`);
+    setTimeout(() => {
+      resolve(6);
+      console.log(`Task 6 completed`);
+    }, 300);
+  });
+const promise7 = () =>
+  new Promise((resolve, _) => {
+    console.log(`Task 7 started`);
+    setTimeout(() => {
+      resolve(7);
+      console.log(`Task 7 completed`);
+    }, 3000);
+  });
+const promise8 = () =>
+  new Promise((resolve, _) => {
+    console.log(`Task 8 started`);
+    setTimeout(() => {
+      resolve(8);
+      console.log(`Task 8 completed`);
+    }, 10);
+  });
+const promise9 = () =>
+  new Promise((resolve, _) => {
+    console.log(`Task 9 started`);
+    setTimeout(() => {
+      resolve(9);
+      console.log(`Task 9 completed`);
+    }, 500);
+  });
+const promise10 = () =>
+  new Promise((resolve, _) => {
+    console.log(`Task 10 started`);
+    setTimeout(() => {
+      resolve(10);
+      console.log(`Task 10 completed`);
+    }, 200);
+  });
+const tasks = [
+  promise1,
+  promise2,
+  promise3,
+  promise4,
+  promise5,
+  promise6,
+  promise7,
+  promise8,
+  promise9,
+  promise10,
+];
+
+promisePool(tasks, 4).then((results) => {
+  console.log(results);
 });
 
-Promise.resolve().then(() => {
-  console.log('Promise 1');
+// const tasks = Array.from({ length: 10 }, (_, i) => {
+//   return async () => {
+//     console.log(`Task ${i} started`);
 
-  process.nextTick(() => {
-    console.log('nextTick inside Promise');
-  });
+//     await new Promise((resolve) => {
+//       setTimeout(resolve, 1000);
+//     });
 
-  Promise.resolve().then(() => {
-    console.log('Promise 2');
-  });
-});
+//     console.log(`Task ${i} completed`);
 
-console.log('script end');
+//     return i;
+//   };
+// });
 
-// script start
-// script end
-// nextTick 1
-// nextTick 2
-// Promise 1
-// Promise inside nextTick
-// Promise 2
-// nextTick inside Promise
+// const results = await promisePool(tasks, 3);
+
+// console.log(results);
