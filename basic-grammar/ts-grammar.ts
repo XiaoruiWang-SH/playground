@@ -298,33 +298,77 @@
 // console.log(b.name);
 // console.log(b.price);
 
+// type RouteConfig = {
+//     path: string;
+//     method: "GET" | "POST";
+// };
 
-type RouteConfig = {
-    path: string;
-    method: "GET" | "POST";
-};
+// const config = {
+//   path: 'users',
+//   method: 'GET',
+// } as const satisfies RouteConfig;
 
-const config = {
-  path: 'users',
-  method: 'GET',
-} as const satisfies RouteConfig;
+// console.log(typeof config.path);
+// console.log(typeof config.method);
 
-console.log(typeof config.path);
-console.log(typeof config.method);
+// // TypeScript typeof
+// type Path = typeof config.path;     // "users"
+// type Method = typeof config.method; // "GET"
 
+// const routes = {
+//     users: {
+//         path: "/users",
+//         method: "GET",
+//     },
+//     createUser: {
+//         path: "/users",
+//         method: "POST",
+//     }
+// } as const satisfies Record<string, RouteConfig>;
+// console.log()
 
-// TypeScript typeof
-type Path = typeof config.path;     // "users"
-type Method = typeof config.method; // "GET"
+// let value: any = 100;
+// value = "hello";
+// value = false;
+// value = null;
+// value = {}
 
-const routes = {
-    users: {
-        path: "/users",
-        method: "GET",
-    },
-    createUser: {
-        path: "/users",
-        method: "POST",
-    }
-} as const satisfies Record<string, RouteConfig>;
-console.log()
+// // custom type guard
+// interface Admin {
+//   role: 'admin';
+//   permissions: string[];
+// }
+
+// interface Customer {
+//   role: 'customer';
+//   purchaseCount: number;
+// }
+
+// type User = Admin | Customer;
+
+// function isAdmin(user: User): user is Admin {
+//   return user.role === 'admin';
+// }
+
+// function isCustomer(user: User): user is Customer {
+//   return user.role === 'customer';
+// }
+
+// function handleUser(user: User) {
+//   if (isAdmin(user)) {
+//     console.log(user.role);
+//   } else {
+//     console.log(user.role);
+//   }
+// }
+
+// handleUser({ role: 'admin', permissions: ['r', 'w'] });
+
+// let value: unknown = "hello";
+// let str = value as string;
+
+// let value = "hello";
+// let num = value as number; // error
+
+let value = "hello";
+let num = value as unknown as string; // allowed, double assertion
