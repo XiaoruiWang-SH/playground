@@ -135,7 +135,7 @@
 // }
 // aEmployee.name?.toUpperCase()
 
-// const aName: unknown = "wang" 
+// const aName: unknown = "wang"
 // const aAntherName = aName as string
 // aAntherName.toUpperCase();
 // console.log(aName)
@@ -190,18 +190,141 @@
 
 // console.log(loggingIdentity(lengthwise))
 
-// Discriminated union
-type Message = { kind: "a", a: string } | { kind: "b", b: number }
-function handleMessages(x: Message) {
-    switch (x.kind) {
-        case "a":
-            console.log(x.a.toUpperCase())
-            break;
-    
-        case "b":
-            console.log(x.b.toFixed(2))
-            break;
+// // Discriminated union
+// type Message = { kind: "a", a: string } | { kind: "b", b: number }
+// function handleMessages(x: Message) {
+//     switch (x.kind) {
+//         case "a":
+//             console.log(x.a.toUpperCase())
+//             break;
+
+//         case "b":
+//             console.log(x.b.toFixed(2))
+//             break;
+//     }
+// }
+// handleMessages({ kind: "a", a: "hello" })
+// handleMessages({ kind: "b", b: 124 })
+
+// type User = [name: string, age: number, active: boolean];
+
+// const user: User = ['Ray', 23, false];
+// console.log(user[0]);
+// console.log(user[1]);
+// console.log(user[2]);
+
+// type UserLength = User["length"];
+// // console.log(typeof UserLength);
+
+// interface User {
+//     id: number;
+//     name: string;
+//     email?: string;
+//     readonly createdAt: Date;
+
+//     greet(): void
+// }
+
+// type User = {
+//     id: number;
+//     name: string;
+//     email?: string;
+//     readonly createdAt: Date;
+
+//     greet(): void
+// }
+
+// const user: User = {
+//     id: 1,
+//     name: "Tom",
+//     createdAt: new Date(),
+
+//     greet() {
+//         console.log(`Hello, ${this.name}`);
+//     },
+// }
+
+// user.greet();
+
+// interface User {
+//     id: number;
+//     name: string;
+// }
+
+// type Admin = User & {
+//     persissons: string[];
+// }
+
+// const admin: Admin = {
+//     id: 1,
+//     name: "Tom",
+//     persissons: ["read", "write"]
+// }
+
+// type Brand<B, T extends string> = B & {
+//   readonly __type: T;
+// };
+
+// interface Car {
+//   name: string;
+//   price: number;
+// }
+
+// interface Phone {
+//   name: string;
+//   price: number;
+// }
+// const car: Brand<Car, 'car'> = {
+//   name: 'Toyoto',
+//   price: 300000,
+//   __type: 'car',
+// };
+
+// const iphone: Brand<Phone, 'iphone'> = {
+//   name: 'iphone',
+//   price: 8000,
+//   __type: 'iphone',
+// };
+
+// type A = string & number; // never
+
+// type B = { name: string } & { price: number };
+
+// const b: B = {
+//     name: "Tom",
+//     price: 123,
+// }
+
+// console.log(b.name);
+// console.log(b.price);
+
+
+type RouteConfig = {
+    path: string;
+    method: "GET" | "POST";
+};
+
+const config = {
+  path: 'users',
+  method: 'GET',
+} as const satisfies RouteConfig;
+
+console.log(typeof config.path);
+console.log(typeof config.method);
+
+
+// TypeScript typeof
+type Path = typeof config.path;     // "users"
+type Method = typeof config.method; // "GET"
+
+const routes = {
+    users: {
+        path: "/users",
+        method: "GET",
+    },
+    createUser: {
+        path: "/users",
+        method: "POST",
     }
-}
-handleMessages({ kind: "a", a: "hello" })
-handleMessages({ kind: "b", b: 124 })
+} as const satisfies Record<string, RouteConfig>;
+console.log()
