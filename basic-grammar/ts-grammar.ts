@@ -370,5 +370,294 @@
 // let value = "hello";
 // let num = value as number; // error
 
-let value = "hello";
-let num = value as unknown as string; // allowed, double assertion
+// let value = "hello";
+// let num = value as unknown as string; // allowed, double assertion
+
+// generics
+function functionName<T>(value: T) {
+  return value;
+}
+
+let a = functionName(100);
+const b = functionName<string>('hello');
+const c = functionName<{ name: string; age: number }>({
+  name: 'Alice',
+  age: 20,
+});
+
+function combine<T>(a: T, b: T): T[] {
+  return [a, b];
+}
+
+let result = combine<number | string>(100, 'hello');
+
+// generic constraints
+function getLength<T extends { length: number }>(value: T): number {
+  return value.length;
+}
+
+const len_str = getLength('hello');
+// const len_num = getLength(100); // error
+const len_object = getLength({ name: 'Alice', length: 10 });
+
+function getPropery<T, K extends keyof T>(obj: T, key: K): T[K] {
+  return obj[key];
+}
+
+// keyof
+const value = getPropery({ name: 'Alice', age: 20 }, 'age');
+
+// // api request
+// interface User {
+//   id: number;
+//   name: string;
+// }
+
+// interface Product {
+//   id: number;
+//   title: string;
+//   price: number;
+// }
+
+// async function request<T>(url: string): Promise<T> {
+//   const response = await fetch(url);
+//   if (!response.ok) {
+//     throw new Error('request failed');
+//   }
+//   return response.json() as Promise<T>;
+// }
+
+// async function print() {
+//   const user = await request<User>('/api/user/1');
+//   const product = await request<Product>('/api/products/1');
+// }
+
+// type HttpMethod = 'GET' | 'Post' | 'PUT' | 'DELETE';
+
+// async function request<TResponse, TBody = undefined>(
+//   url: string,
+//   method: HttpMethod,
+//   body?: TBody,
+// ): Promise<TResponse> {
+//   const requestInfo: RequestInit = {
+//     method: method,
+//     headers: { 'Content-Type': 'application/json' },
+//   };
+//   if (body !== undefined) {
+//     requestInfo.body = JSON.stringify(body);
+//   }
+
+//   const response = await fetch(url, requestInfo);
+//   if (!response.ok) {
+//     throw new Error('request failed');
+//   }
+//   return response.json() as Promise<TResponse>;
+// }
+
+// interface MyBody {
+//   name: string;
+//   age: number;
+// }
+
+// async function print() {
+//   const body: MyBody = { name: 'Alice', age: 20 };
+//   const user = await request<User, MyBody>('/api/user/1', 'Post', body);
+//   const product = await request<Product>('/api/products/1', 'GET');
+// }
+
+// // generic class
+// class Box<T> {
+//   value: T;
+
+//   constructor(value: T) {
+//     this.value = value;
+//   }
+
+//   getValue(): T {
+//     return this.value;
+//   }
+// }
+
+// const box_num = new Box(100);
+// console.log(box_num.getValue());
+// const box_str = new Box('Hello');
+// console.log(box_str.getValue());
+
+// class DataContainer<T> {
+//   private items: T[] = [];
+
+//   add(item: T) {
+//     this.items.push(item);
+//   }
+
+//   remove(index: number): void {
+//     this.items.splice(index, 1);
+//   }
+
+//   get(index: number): T | undefined {
+//     return this.items[index];
+//   }
+
+//   getAll(): T[] {
+//     return [...this.items];
+//   }
+
+//   get length(): number { // used by obj.length
+//     return this.items.length;
+//   }
+//   //  class's getter and setter usage
+
+// }
+
+// const userContainer = new DataContainer<User>();
+// userContainer.add({ id: 1, name: 'Alice' });
+// userContainer.add({ id: 2, name: 'Tom' });
+
+// const users = userContainer.getAll()
+// console.log(users);
+// console.log(userContainer.length);
+
+// // Repository
+// interface Entity {
+//   id: number;
+// }
+
+// interface User extends Entity {
+//   name: string;
+//   email: string;
+// }
+
+// interface Product extends Entity {
+//   name: string;
+//   price: number;
+// }
+
+// class Repository<T extends Entity> {
+//   protected items: T[] = [];
+
+//   create(item: T): void {
+//     this.items.push(item);
+//   }
+
+//   findById(id: number): T | undefined {
+//     return this.items.find((item) => item.id === id);
+//   }
+
+//   findAll(): T[] {
+//     return [...this.items];
+//   }
+
+//   update(id: number, data: Partial<T>): boolean {
+//     const obj = this.findById(id);
+//     if (!obj) {
+//       return false;
+//     }
+//     Object.assign(obj, data);
+//     return true;
+//   }
+
+//   delete(id: number): boolean {
+//     const index = this.items.findIndex((item) => item.id === id);
+//     if (index === -1) {
+//       return false;
+//     }
+//     this.items.splice(index, 1);
+//     return true;
+//   }
+// }
+
+// const userRepository = new Repository<User>();
+// userRepository.create({ id: 1, name: 'Alice', email: 'alice@gmail.com' });
+
+// const productRepository = new Repository<Product>();
+// productRepository.create({ id: 2, name: 'xiaomi', price: 4600 });
+
+// API Client
+interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+}
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+}
+
+interface RequestOptions<TBody = unknown> {
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  body?: TBody;
+  headers?: Record<string, string>;
+}
+
+interface CreateUserInput {
+  name: string;
+  email: string;
+}
+
+async function request<TResponse, TBody = unknown>(
+  url: string,
+  options: RequestOptions<TBody>,
+): Promise<TResponse> {
+  const response = await fetch(url, {
+    method: options.method ?? 'GET',
+    body: options.body === undefined ? undefined : JSON.stringify(options.body),
+  });
+  if (!response.ok) {
+    throw new Error('request failed');
+  }
+  return response.json() as Promise<TResponse>;
+}
+
+interface ApiClient {
+  get<TResponse>(url: string): Promise<TResponse>;
+
+  post<TResponse, TBody>(
+    url: string,
+    body: RequestOptions<TBody>,
+  ): Promise<TResponse>;
+}
+
+const apiClient: ApiClient = {
+  get<TResponse>(url: string): Promise<TResponse> {
+    return request<TResponse>(url, {});
+  },
+
+  post<TResponse, TBody = unknown>(
+    url: string,
+    options: RequestOptions<TBody>,
+  ): Promise<TResponse> {
+    return request<TResponse, TBody>(url, options);
+  },
+};
+
+const options: RequestOptions<CreateUserInput> = {
+  method: 'POST',
+  body: {
+    name: 'Alice',
+    email: 'alice@gmail.com',
+  },
+  headers: { 'Content-Type': 'applicaiton/json' },
+};
+
+async function print() {
+  const user_response = await request<ApiResponse<User>>('/api/user/1', {});
+  const product_response = await request<ApiResponse<Product>>(
+    '/api/product/1',
+    options,
+  );
+
+  const user_response_apiclient =
+    apiClient.get<ApiResponse<User>>('/api/user/1');
+  const product_response_apiclent = apiClient.post<
+    ApiResponse<Product>,
+    CreateUserInput
+  >('/api/product/1', options);
+}
