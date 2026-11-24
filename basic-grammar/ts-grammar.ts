@@ -572,92 +572,181 @@ const value = getPropery({ name: 'Alice', age: 20 }, 'age');
 // const productRepository = new Repository<Product>();
 // productRepository.create({ id: 2, name: 'xiaomi', price: 4600 });
 
-// API Client
-interface ApiResponse<T> {
-  success: boolean;
-  message: string;
-  data: T;
+// // API Client
+// interface ApiResponse<T> {
+//   success: boolean;
+//   message: string;
+//   data: T;
+// }
+
+// interface User {
+//   id: number;
+//   name: string;
+//   email: string;
+// }
+
+// interface Product {
+//   id: number;
+//   name: string;
+//   price: number;
+// }
+
+// interface RequestOptions<TBody = unknown> {
+//   method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
+//   body?: TBody;
+//   headers?: Record<string, string>;
+// }
+
+// interface CreateUserInput {
+//   name: string;
+//   email: string;
+// }
+
+// async function request<TResponse, TBody = unknown>(
+//   url: string,
+//   options: RequestOptions<TBody>,
+// ): Promise<TResponse> {
+//   const response = await fetch(url, {
+//     method: options.method ?? 'GET',
+//     body: options.body === undefined ? undefined : JSON.stringify(options.body),
+//   });
+//   if (!response.ok) {
+//     throw new Error('request failed');
+//   }
+//   return response.json() as Promise<TResponse>;
+// }
+
+// interface ApiClient {
+//   get<TResponse>(url: string): Promise<TResponse>;
+
+//   post<TResponse, TBody>(
+//     url: string,
+//     body: RequestOptions<TBody>,
+//   ): Promise<TResponse>;
+// }
+
+// const apiClient: ApiClient = {
+//   get<TResponse>(url: string): Promise<TResponse> {
+//     return request<TResponse>(url, {});
+//   },
+
+//   post<TResponse, TBody = unknown>(
+//     url: string,
+//     options: RequestOptions<TBody>,
+//   ): Promise<TResponse> {
+//     return request<TResponse, TBody>(url, options);
+//   },
+// };
+
+// const options: RequestOptions<CreateUserInput> = {
+//   method: 'POST',
+//   body: {
+//     name: 'Alice',
+//     email: 'alice@gmail.com',
+//   },
+//   headers: { 'Content-Type': 'applicaiton/json' },
+// };
+
+// async function print() {
+//   const user_response = await request<ApiResponse<User>>('/api/user/1', {});
+//   const product_response = await request<ApiResponse<Product>>(
+//     '/api/product/1',
+//     options,
+//   );
+
+//   const user_response_apiclient =
+//     apiClient.get<ApiResponse<User>>('/api/user/1');
+//   const product_response_apiclent = apiClient.post<
+//     ApiResponse<Product>,
+//     CreateUserInput
+//   >('/api/product/1', options);
+// }
+
+// type IsString<T> = T extends string ? true : false;
+// type A = IsString<string>; // true
+// type B = IsString<number>; // false
+// type C = IsString<"Hello">; // true
+
+// type GetType<T extends string | number> = T extends string ? "text" : "numeric";
+// type A = GetType<string>; // text
+// type B = GetType<number>; // numeric
+
+// // generic default parameters
+// interface ApiResponse<T = string> {
+//   data: T;
+// }
+
+// // type UserResponse = ApiResponse<string>;
+
+// // const user_response: UserResponse = {
+// //   data: 'hello',
+// // };
+
+// const user_response: ApiResponse<number> = {
+//   data: 100,
+// };
+
+// // function createLight<T extends string>(colors: T[], defaultColor: NoInfer<T>) {
+// //   return defaultColor;
+// // }
+
+// // const defaultColor = createLight(["red", "blue"], "yellow") // error
+// type Color = 'red' | 'blue';
+
+// function createLight<T extends Color>(colors: T[], defaultColor: T) {
+//   return defaultColor;
+// }
+// // const defaultColor = createLight(['red', 'blue'], 'blue');
+// // const defaultColor = createLight(['red', 'blue'], 'yellow'); // error
+
+// variance
+class Animal {
+  name = 'animal';
 }
 
-interface User {
-  id: number;
-  name: string;
-  email: string;
-}
-
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-}
-
-interface RequestOptions<TBody = unknown> {
-  method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
-  body?: TBody;
-  headers?: Record<string, string>;
-}
-
-interface CreateUserInput {
-  name: string;
-  email: string;
-}
-
-async function request<TResponse, TBody = unknown>(
-  url: string,
-  options: RequestOptions<TBody>,
-): Promise<TResponse> {
-  const response = await fetch(url, {
-    method: options.method ?? 'GET',
-    body: options.body === undefined ? undefined : JSON.stringify(options.body),
-  });
-  if (!response.ok) {
-    throw new Error('request failed');
+class Dog extends Animal {
+  bark() {
+    console.log('Woof!');
   }
-  return response.json() as Promise<TResponse>;
 }
 
-interface ApiClient {
-  get<TResponse>(url: string): Promise<TResponse>;
-
-  post<TResponse, TBody>(
-    url: string,
-    body: RequestOptions<TBody>,
-  ): Promise<TResponse>;
+// invariance
+interface Producer<T> {
+  get(): T;
 }
 
-const apiClient: ApiClient = {
-  get<TResponse>(url: string): Promise<TResponse> {
-    return request<TResponse>(url, {});
-  },
-
-  post<TResponse, TBody = unknown>(
-    url: string,
-    options: RequestOptions<TBody>,
-  ): Promise<TResponse> {
-    return request<TResponse, TBody>(url, options);
+const dogProducer: Producer<Dog> = {
+  get() {
+    return new Dog();
   },
 };
 
-const options: RequestOptions<CreateUserInput> = {
-  method: 'POST',
-  body: {
-    name: 'Alice',
-    email: 'alice@gmail.com',
+const animalProducer: Producer<Animal> = {
+  get() {
+    return new Animal();
   },
-  headers: { 'Content-Type': 'applicaiton/json' },
 };
 
-async function print() {
-  const user_response = await request<ApiResponse<User>>('/api/user/1', {});
-  const product_response = await request<ApiResponse<Product>>(
-    '/api/product/1',
-    options,
-  );
+const animalProducer1: Producer<Animal> = dogProducer; // ✅
+// const dogProducer1: Producer<Dog> = animalProducer; // error
 
-  const user_response_apiclient =
-    apiClient.get<ApiResponse<User>>('/api/user/1');
-  const product_response_apiclent = apiClient.post<
-    ApiResponse<Product>,
-    CreateUserInput
-  >('/api/product/1', options);
+// contravariance
+interface Consumer<T> {
+  consume: (obj: T) => void;
 }
+
+const dogConsumer: Consumer<Dog> = {
+  consume(dog) {
+    // console.log(dog.name);
+    dog.bark();
+  },
+};
+
+const animalConsumer: Consumer<Animal> = {
+  consume(animal) {
+    console.log(animal.name);
+  },
+};
+
+// const animalConsumer1: Consumer<Animal> = dogConsumer; // error
+const dogConsumer1: Consumer<Dog> = animalConsumer;
