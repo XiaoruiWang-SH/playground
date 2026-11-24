@@ -373,39 +373,39 @@
 // let value = "hello";
 // let num = value as unknown as string; // allowed, double assertion
 
-// generics
-function functionName<T>(value: T) {
-  return value;
-}
+// // generics
+// function functionName<T>(value: T) {
+//   return value;
+// }
 
-let a = functionName(100);
-const b = functionName<string>('hello');
-const c = functionName<{ name: string; age: number }>({
-  name: 'Alice',
-  age: 20,
-});
+// let a = functionName(100);
+// const b = functionName<string>('hello');
+// const c = functionName<{ name: string; age: number }>({
+//   name: 'Alice',
+//   age: 20,
+// });
 
-function combine<T>(a: T, b: T): T[] {
-  return [a, b];
-}
+// function combine<T>(a: T, b: T): T[] {
+//   return [a, b];
+// }
 
-let result = combine<number | string>(100, 'hello');
+// let result = combine<number | string>(100, 'hello');
 
-// generic constraints
-function getLength<T extends { length: number }>(value: T): number {
-  return value.length;
-}
+// // generic constraints
+// function getLength<T extends { length: number }>(value: T): number {
+//   return value.length;
+// }
 
-const len_str = getLength('hello');
-// const len_num = getLength(100); // error
-const len_object = getLength({ name: 'Alice', length: 10 });
+// const len_str = getLength('hello');
+// // const len_num = getLength(100); // error
+// const len_object = getLength({ name: 'Alice', length: 10 });
 
-function getPropery<T, K extends keyof T>(obj: T, key: K): T[K] {
-  return obj[key];
-}
+// function getPropery<T, K extends keyof T>(obj: T, key: K): T[K] {
+//   return obj[key];
+// }
 
-// keyof
-const value = getPropery({ name: 'Alice', age: 20 }, 'age');
+// // keyof
+// const value = getPropery({ name: 'Alice', age: 20 }, 'age');
 
 // // api request
 // interface User {
@@ -699,54 +699,138 @@ const value = getPropery({ name: 'Alice', age: 20 }, 'age');
 // // const defaultColor = createLight(['red', 'blue'], 'blue');
 // // const defaultColor = createLight(['red', 'blue'], 'yellow'); // error
 
-// variance
-class Animal {
-  name = 'animal';
-}
+// // variance
+// class Animal {
+//   name = 'animal';
+// }
 
-class Dog extends Animal {
-  bark() {
-    console.log('Woof!');
-  }
-}
+// class Dog extends Animal {
+//   bark() {
+//     console.log('Woof!');
+//   }
+// }
 
-// invariance
-interface Producer<T> {
-  get(): T;
-}
+// // invariance
+// interface Producer<T> {
+//   get(): T;
+// }
 
-const dogProducer: Producer<Dog> = {
-  get() {
-    return new Dog();
-  },
+// const dogProducer: Producer<Dog> = {
+//   get() {
+//     return new Dog();
+//   },
+// };
+
+// const animalProducer: Producer<Animal> = {
+//   get() {
+//     return new Animal();
+//   },
+// };
+
+// const animalProducer1: Producer<Animal> = dogProducer; // ✅
+// // const dogProducer1: Producer<Dog> = animalProducer; // error
+
+// // contravariance
+// interface Consumer<T> {
+//   consume: (obj: T) => void;
+// }
+
+// const dogConsumer: Consumer<Dog> = {
+//   consume(dog) {
+//     // console.log(dog.name);
+//     dog.bark();
+//   },
+// };
+
+// const animalConsumer: Consumer<Animal> = {
+//   consume(animal) {
+//     console.log(animal.name);
+//   },
+// };
+
+// // // const animalConsumer1: Consumer<Animal> = dogConsumer; // error
+// // const dogConsumer1: Consumer<Dog> = animalConsumer;
+
+// type ArrayKeys = keyof string[];
+// type A = keyof any;
+
+// function getPropery<T, K extends keyof T>(obj: T, key: K): T[K] {
+//   return obj[key];
+// }
+
+// const user = {
+//   id: 111,
+//   name: 'Alice',
+//   age: 20,
+//   married: false,
+// };
+// console.log(getPropery(user, 'id'));
+// console.log(getPropery(user, 'name'));
+// // console.log(getPropery(user, 'nationality'));
+
+// type User = {
+//   id: number;
+//   name: string;
+//   age: number;
+// };
+
+// type NewType<T> = {
+//   [K in keyof T]: T[K];
+// }; // copy type
+
+// type NewType1<T> = {
+//   [K in keyof T]?: T[K];
+// }; // optional property
+
+// type NewType2<T> = {
+//   readonly [K in keyof T]: T[K];
+// }; // readonly property
+
+// type NewType3<T> = {
+//   readonly [K in keyof T]: string;
+// }; //
+
+// type NewType4<T> = {
+//   readonly [K in keyof T]: Promise<T[K]>;
+// }; //
+
+// type UserType = NewType<User>;
+
+type User = {
+  id: number;
+  name: string;
+  email: string;
+  age: number;
+  active: boolean;
 };
 
-const animalProducer: Producer<Animal> = {
-  get() {
-    return new Animal();
-  },
+type PickProperty<T> = {
+  [K in keyof T]: T[K] extends string ? K : never;
+}[keyof T]; // never will dispear
+
+type newUser = PickProperty<User>;
+
+type RemoveAllNonStringProperty<T> = {
+  [K in keyof T as T[K] extends string ? K : never]: T[K];
+};
+type newUser1 = RemoveAllNonStringProperty<User>;
+
+type PickNumberProperty<T> = {
+  [K in keyof T]: T[K] extends number ? K : never;
+}[keyof T];
+
+type newUser2 = PickNumberProperty<User>;
+
+type User1 = {
+  id: number;
+  name: string;
+  getName: () => string;
+  updateAge: (age: number) => void;
+  deleteUser: () => boolean;
 };
 
-const animalProducer1: Producer<Animal> = dogProducer; // ✅
-// const dogProducer1: Producer<Dog> = animalProducer; // error
+type PickFunctionProperty<T> = {
+  [K in keyof T]: T[K] extends (...args: [any]) => any ? K : never;
+}[keyof T];
 
-// contravariance
-interface Consumer<T> {
-  consume: (obj: T) => void;
-}
-
-const dogConsumer: Consumer<Dog> = {
-  consume(dog) {
-    // console.log(dog.name);
-    dog.bark();
-  },
-};
-
-const animalConsumer: Consumer<Animal> = {
-  consume(animal) {
-    console.log(animal.name);
-  },
-};
-
-// const animalConsumer1: Consumer<Animal> = dogConsumer; // error
-const dogConsumer1: Consumer<Dog> = animalConsumer;
+type newUser3 = PickFunctionProperty<User1>;
