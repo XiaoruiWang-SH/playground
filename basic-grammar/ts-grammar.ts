@@ -796,41 +796,72 @@
 
 // type UserType = NewType<User>;
 
-type User = {
-  id: number;
-  name: string;
-  email: string;
-  age: number;
-  active: boolean;
-};
+// type User = {
+//   id: number;
+//   name: string;
+//   email: string;
+//   age: number;
+//   active: boolean;
+// };
 
-type PickProperty<T> = {
-  [K in keyof T]: T[K] extends string ? K : never;
-}[keyof T]; // never will dispear
+// type PickProperty<T> = {
+//   [K in keyof T]: T[K] extends string ? K : never;
+// }[keyof T]; // never will dispear
 
-type newUser = PickProperty<User>;
+// type newUser = PickProperty<User>;
 
-type RemoveAllNonStringProperty<T> = {
-  [K in keyof T as T[K] extends string ? K : never]: T[K];
-};
-type newUser1 = RemoveAllNonStringProperty<User>;
+// type RemoveAllNonStringProperty<T> = {
+//   [K in keyof T as T[K] extends string ? K : never]: T[K];
+// };
+// type newUser1 = RemoveAllNonStringProperty<User>;
 
-type PickNumberProperty<T> = {
-  [K in keyof T]: T[K] extends number ? K : never;
-}[keyof T];
+// type PickNumberProperty<T> = {
+//   [K in keyof T]: T[K] extends number ? K : never;
+// }[keyof T];
 
-type newUser2 = PickNumberProperty<User>;
+// type newUser2 = PickNumberProperty<User>;
 
-type User1 = {
-  id: number;
-  name: string;
-  getName: () => string;
-  updateAge: (age: number) => void;
-  deleteUser: () => boolean;
-};
+// type User1 = {
+//   id: number;
+//   name: string;
+//   getName: () => string;
+//   updateAge: (age: number) => void;
+//   deleteUser: () => boolean;
+// };
 
-type PickFunctionProperty<T> = {
-  [K in keyof T]: T[K] extends (...args: [any]) => any ? K : never;
-}[keyof T];
+// type PickFunctionProperty<T> = {
+//   [K in keyof T]: T[K] extends (...args: [any]) => any ? K : never;
+// }[keyof T];
 
-type newUser3 = PickFunctionProperty<User1>;
+// type newUser3 = PickFunctionProperty<User1>;
+
+// infer
+type MyArray = string[];
+// element type
+type GetElementType<T> = T extends (infer U)[] ? U : never;
+type ElementType = GetElementType<MyArray>;
+// function's return type
+type MyFunction = (name: string, age: number) => boolean;
+type GetFunctionReturnType<T> = T extends (...args: any[]) => infer U
+  ? U
+  : never;
+type FunctionReturnType = GetFunctionReturnType<MyFunction>;
+// function's parameters type
+type GetFunctionParametersType<T> = T extends (...args: infer U) => any
+  ? U
+  : never;
+type FunctionParametersType = GetFunctionParametersType<MyFunction>;
+
+type GetFunctionParametersType2<T> = T extends (...args: (infer U)[]) => any
+  ? U
+  : never;
+type FunctionParametersType2 = GetFunctionParametersType2<MyFunction>; // never
+
+type GetFunctionParametersType3<T> = T extends (
+  first: infer U,
+  ...args: any[]
+) => any
+  ? U
+  : never;
+type FunctionParametersType3 = GetFunctionParametersType3<MyFunction>;
+
