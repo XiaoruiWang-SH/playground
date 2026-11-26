@@ -868,74 +868,199 @@
 // template literal type
 // type MyType = `hello ${string}`;
 
-type MyType<T extends string> = `hello ${T}`;
+// type MyType<T extends string> = `hello ${T}`;
 
-const a: MyType<string> = 'hello a';
-let b: MyType<'world'> = 'hello world';
+// const a: MyType<string> = 'hello a';
+// let b: MyType<'world'> = 'hello world';
 
-type ApiPath<T extends string> = `/api/${T}`;
-type UserApi = ApiPath<'user'>;
-type OrderApi = ApiPath<'order'>;
+// type ApiPath<T extends string> = `/api/${T}`;
+// type UserApi = ApiPath<'user'>;
+// type OrderApi = ApiPath<'order'>;
 
-type HttpMethod = 'GET' | 'POST';
-type Resource = 'user' | 'orders';
-type ApiIdentifier<
-  T extends HttpMethod,
-  U extends Resource,
-> = `/${T}/api/${Resource}`;
+// type HttpMethod = 'GET' | 'POST';
+// type Resource = 'user' | 'orders';
+// type ApiIdentifier<
+//   T extends HttpMethod,
+//   U extends Resource,
+// > = `/${T}/api/${Resource}`;
 
-// const userApiPath: UserApi = '/api/user';
-// const orderApiPath: OrderApi = '/api/order';
+// // const userApiPath: UserApi = '/api/user';
+// // const orderApiPath: OrderApi = '/api/order';
 
-const userApiPath: ApiIdentifier<'GET', 'user'> = '/GET/api/user';
-const orderApiPath: ApiIdentifier<'POST', 'orders'> = '/POST/api/orders';
+// const userApiPath: ApiIdentifier<'GET', 'user'> = '/GET/api/user';
+// const orderApiPath: ApiIdentifier<'POST', 'orders'> = '/POST/api/orders';
 
-type Status = 'success' | 'error' | 'loading';
-type Message = `status_${Status}`;
+// type Status = 'success' | 'error' | 'loading';
+// type Message = `status_${Status}`;
 
-type Color = 'red' | 'blue';
-type Size = 'small' | 'large';
+// type Color = 'red' | 'blue';
+// type Size = 'small' | 'large';
 
-type Color_Size = `${Color}_${Size}`;
+// type Color_Size = `${Color}_${Size}`;
 
-type User_id = `user_${string}`;
-function getUser(id: User_id) {
-  console.log(id);
+// type User_id = `user_${string}`;
+// function getUser(id: User_id) {
+//   console.log(id);
+// }
+// getUser('user_123');
+// // getUser("id_123"); // error
+
+// type ExtractName<T> = T extends `hello ${infer U}` ? U : never;
+
+// type A = ExtractName<'hello world'>;
+// type B = ExtractName<'aaa'>; // never
+
+// type ParseUser<T> = T extends `user_${infer ID}_${infer Name}`
+//   ? {
+//       id: ID;
+//       name: Name;
+//     }
+//   : never;
+// type C = ParseUser<'user_123_tom'>;
+// // type D = ParseUser<"user123tom">; // never
+
+// // type SnakeToCamel<T> = T extends `${infer First}_${infer Second}` ? `${First}${Second}` : never;
+// // type E = SnakeToCamel<"User_Tom">;
+// type SnakeToCamel<T extends string> = T extends `${infer First}_${infer Rest}`
+//   ? `${First}${Capitalize<SnakeToCamel<Rest>>}`
+//   : T;
+// type F = SnakeToCamel<'user_tom'>;
+// type G = SnakeToCamel<'user_jimmy_hello'>;
+
+// type EventMap<T> = {
+//   [K in keyof T as `${string & K}_changed`]: T[K];
+// };
+
+// type UserEvents = {
+//   idChanged: number;
+//   nameChanged: string;
+//   ageChanged: number;
+//   1: string;
+// };
+
+// type UserEventsChanged = EventMap<UserEvents>;
+
+// recursive type
+interface TreeNode<T> {
+  data: T;
+  children: TreeNode<T>[];
 }
-getUser('user_123');
-// getUser("id_123"); // error
 
-type ExtractName<T> = T extends `hello ${infer U}` ? U : never;
+interface MenuData {
+  id: number;
+  title: string;
+  path: string;
+}
 
-type A = ExtractName<'hello world'>;
-type B = ExtractName<'aaa'>; // never
+type MenuType = TreeNode<MenuData>;
 
-type ParseUser<T> = T extends `user_${infer ID}_${infer Name}`
-  ? {
-      id: ID;
-      name: Name;
-    }
-  : never;
-type C = ParseUser<'user_123_tom'>;
-// type D = ParseUser<"user123tom">; // never
-
-// type SnakeToCamel<T> = T extends `${infer First}_${infer Second}` ? `${First}${Second}` : never;
-// type E = SnakeToCamel<"User_Tom">;
-type SnakeToCamel<T extends string> = T extends `${infer First}_${infer Rest}`
-  ? `${First}${Capitalize<SnakeToCamel<Rest>>}`
-  : T;
-type F = SnakeToCamel<'user_tom'>;
-type G = SnakeToCamel<'user_jimmy_hello'>;
-
-type EventMap<T> = {
-  [K in keyof T as `${string & K}_changed`]: T[K];
+const menuTree: MenuType = {
+  data: {
+    id: 1,
+    title: 'first level',
+    path: 'user/tech',
+  },
+  children: [
+    {
+      data: {
+        id: 11,
+        title: 'sub first level 1',
+        path: 'user/tech/1',
+      },
+      children: [],
+    },
+    {
+      data: {
+        id: 12,
+        title: 'sub first level 2',
+        path: 'user/tech/2',
+      },
+      children: [],
+    },
+  ],
 };
 
-type UserEvents = {
-  idChanged: number;
-  nameChanged: string;
-  ageChanged: number;
-  1: string;
+// type DeepReadonly<T> = {
+//   readonly [K in keyof T]: T[K] extends object ? DeepReadonly<T[K]> : T[K];
+// };
+
+interface User {
+  name: string;
+  profile: {
+    age: number;
+    address: {
+      city: string;
+      zipcode: number;
+    };
+  };
+}
+
+type ReadonlyUser = DeepReadonly<User>;
+
+const user: ReadonlyUser = {
+  name: 'wang',
+  profile: {
+    age: 20,
+    address: {
+      city: 'Shanghai',
+      zipcode: 10086,
+    },
+  },
 };
 
-type UserEventsChanged = EventMap<UserEvents>;
+// user.name = 'Zhang'; // error
+// user.profile.age = 25; // error
+// user.profile.address.city = 'Beijing'; // error
+
+interface LinkNode<T> {
+  value: T;
+  next: LinkNode<T> | null;
+}
+
+const list: LinkNode<number> = {
+  value: 10,
+  next: {
+    value: 20,
+    next: {
+      value: 30,
+      next: null,
+    },
+  },
+};
+
+type DeepUnwrap<T> = T extends (infer U)[] ? DeepUnwrap<U> : T;
+type Array1 = string[];
+type Array2 = number[][];
+type Array3 = boolean[][][];
+
+type DeepUnwrapTypeArray1 = DeepUnwrap<Array1>;
+type DeepUnwrapTypeArray2 = DeepUnwrap<Array2>;
+type DeepUnwrapTypeArray3 = DeepUnwrap<Array3>;
+
+type DeepReadonly<T> = { readonly [K in keyof T]: DeepReadonly<T[K]> };
+
+type DeepPartial<T> = { [K in keyof T]?: DeepPartial<T[K]> };
+
+type DeepPartialUser = DeepPartial<User>;
+
+type DeepRequired<T> = { [K in keyof T]-?: DeepRequired<T[K]> };
+
+// recursive type with max depth
+type DeepReadonly2<T, Depth extends unknown[] = []> = Depth['length'] extends 2
+  ? T
+  : { readonly [K in keyof T]: DeepReadonly2<T[K], [...Depth, unknown]> };
+
+type DeepReadonly2User = DeepReadonly2<User>;
+const user2: DeepReadonly2User = {
+  name: 'wang',
+  profile: {
+    age: 20,
+    address: {
+      city: 'Shanghai',
+      zipcode: 10086,
+    },
+  },
+};
+// user2.profile.age = 30; // error ❌
+user2.profile.address.city = "Beijing"; // ✅
+
