@@ -835,33 +835,107 @@
 
 // type newUser3 = PickFunctionProperty<User1>;
 
-// infer
-type MyArray = string[];
-// element type
-type GetElementType<T> = T extends (infer U)[] ? U : never;
-type ElementType = GetElementType<MyArray>;
-// function's return type
-type MyFunction = (name: string, age: number) => boolean;
-type GetFunctionReturnType<T> = T extends (...args: any[]) => infer U
-  ? U
-  : never;
-type FunctionReturnType = GetFunctionReturnType<MyFunction>;
-// function's parameters type
-type GetFunctionParametersType<T> = T extends (...args: infer U) => any
-  ? U
-  : never;
-type FunctionParametersType = GetFunctionParametersType<MyFunction>;
+// // infer
+// type MyArray = string[];
+// // element type
+// type GetElementType<T> = T extends (infer U)[] ? U : never;
+// type ElementType = GetElementType<MyArray>;
+// // function's return type
+// type MyFunction = (name: string, age: number) => boolean;
+// type GetFunctionReturnType<T> = T extends (...args: any[]) => infer U
+//   ? U
+//   : never;
+// type FunctionReturnType = GetFunctionReturnType<MyFunction>;
+// // function's parameters type
+// type GetFunctionParametersType<T> = T extends (...args: infer U) => any
+//   ? U
+//   : never;
+// type FunctionParametersType = GetFunctionParametersType<MyFunction>;
 
-type GetFunctionParametersType2<T> = T extends (...args: (infer U)[]) => any
-  ? U
-  : never;
-type FunctionParametersType2 = GetFunctionParametersType2<MyFunction>; // never
+// type GetFunctionParametersType2<T> = T extends (...args: (infer U)[]) => any
+//   ? U
+//   : never;
+// type FunctionParametersType2 = GetFunctionParametersType2<MyFunction>; // never
 
-type GetFunctionParametersType3<T> = T extends (
-  first: infer U,
-  ...args: any[]
-) => any
-  ? U
-  : never;
-type FunctionParametersType3 = GetFunctionParametersType3<MyFunction>;
+// type GetFunctionParametersType3<T> = T extends (
+//   first: infer U,
+//   ...args: any[]
+// ) => any
+//   ? U
+//   : never;
+// type FunctionParametersType3 = GetFunctionParametersType3<MyFunction>;
 
+// template literal type
+// type MyType = `hello ${string}`;
+
+type MyType<T extends string> = `hello ${T}`;
+
+const a: MyType<string> = 'hello a';
+let b: MyType<'world'> = 'hello world';
+
+type ApiPath<T extends string> = `/api/${T}`;
+type UserApi = ApiPath<'user'>;
+type OrderApi = ApiPath<'order'>;
+
+type HttpMethod = 'GET' | 'POST';
+type Resource = 'user' | 'orders';
+type ApiIdentifier<
+  T extends HttpMethod,
+  U extends Resource,
+> = `/${T}/api/${Resource}`;
+
+// const userApiPath: UserApi = '/api/user';
+// const orderApiPath: OrderApi = '/api/order';
+
+const userApiPath: ApiIdentifier<'GET', 'user'> = '/GET/api/user';
+const orderApiPath: ApiIdentifier<'POST', 'orders'> = '/POST/api/orders';
+
+type Status = 'success' | 'error' | 'loading';
+type Message = `status_${Status}`;
+
+type Color = 'red' | 'blue';
+type Size = 'small' | 'large';
+
+type Color_Size = `${Color}_${Size}`;
+
+type User_id = `user_${string}`;
+function getUser(id: User_id) {
+  console.log(id);
+}
+getUser('user_123');
+// getUser("id_123"); // error
+
+type ExtractName<T> = T extends `hello ${infer U}` ? U : never;
+
+type A = ExtractName<'hello world'>;
+type B = ExtractName<'aaa'>; // never
+
+type ParseUser<T> = T extends `user_${infer ID}_${infer Name}`
+  ? {
+      id: ID;
+      name: Name;
+    }
+  : never;
+type C = ParseUser<'user_123_tom'>;
+// type D = ParseUser<"user123tom">; // never
+
+// type SnakeToCamel<T> = T extends `${infer First}_${infer Second}` ? `${First}${Second}` : never;
+// type E = SnakeToCamel<"User_Tom">;
+type SnakeToCamel<T extends string> = T extends `${infer First}_${infer Rest}`
+  ? `${First}${Capitalize<SnakeToCamel<Rest>>}`
+  : T;
+type F = SnakeToCamel<'user_tom'>;
+type G = SnakeToCamel<'user_jimmy_hello'>;
+
+type EventMap<T> = {
+  [K in keyof T as `${string & K}_changed`]: T[K];
+};
+
+type UserEvents = {
+  idChanged: number;
+  nameChanged: string;
+  ageChanged: number;
+  1: string;
+};
+
+type UserEventsChanged = EventMap<UserEvents>;
