@@ -85,7 +85,7 @@
     gender: 'Male',
   };
   console.log(aPerson);
-  aPerson.id = '78975098'; // cannot rewrite it
+//   aPerson.id = '78975098'; // cannot rewrite it
   aPerson.name = 'Ray';
   console.log(aPerson);
 }
@@ -369,10 +369,10 @@
     }
   }
   handleUser({ role: 'admin', permissions: ['r', 'w'] });
-  let value: unknown = 'hello';
-  let str = value as string;
-  let value = 'hello';
-  let num = value as number; // error
+//   let value: unknown = 'hello';
+//   let str = value as string;
+//   let value = 'hello';
+//   let num = value as number; // error
   let value = 'hello';
   let num = value as unknown as string; // allowed, double assertion
 }
@@ -461,6 +461,10 @@
 }
 
 {
+  interface User {
+    id: number;
+    name: string;
+  }
   // generic class
   class Box<T> {
     value: T;
@@ -747,36 +751,38 @@
     readonly [K in keyof T]: Promise<T[K]>;
   }; //
   type UserType = NewType<User>;
-  type User = {
-    id: number;
-    name: string;
-    email: string;
-    age: number;
-    active: boolean;
-  };
-  type PickProperty<T> = {
-    [K in keyof T]: T[K] extends string ? K : never;
-  }[keyof T]; // never will dispear
-  type newUser = PickProperty<User>;
-  type RemoveAllNonStringProperty<T> = {
-    [K in keyof T as T[K] extends string ? K : never]: T[K];
-  };
-  type newUser1 = RemoveAllNonStringProperty<User>;
-  type PickNumberProperty<T> = {
-    [K in keyof T]: T[K] extends number ? K : never;
-  }[keyof T];
-  type newUser2 = PickNumberProperty<User>;
-  type User1 = {
-    id: number;
-    name: string;
-    getName: () => string;
-    updateAge: (age: number) => void;
-    deleteUser: () => boolean;
-  };
-  type PickFunctionProperty<T> = {
-    [K in keyof T]: T[K] extends (...args: [any]) => any ? K : never;
-  }[keyof T];
-  type newUser3 = PickFunctionProperty<User1>;
+  {
+    type User = {
+      id: number;
+      name: string;
+      email: string;
+      age: number;
+      active: boolean;
+    };
+    type PickProperty<T> = {
+      [K in keyof T]: T[K] extends string ? K : never;
+    }[keyof T]; // never will dispear
+    type newUser = PickProperty<User>;
+    type RemoveAllNonStringProperty<T> = {
+      [K in keyof T as T[K] extends string ? K : never]: T[K];
+    };
+    type newUser1 = RemoveAllNonStringProperty<User>;
+    type PickNumberProperty<T> = {
+      [K in keyof T]: T[K] extends number ? K : never;
+    }[keyof T];
+    type newUser2 = PickNumberProperty<User>;
+    type User1 = {
+      id: number;
+      name: string;
+      getName: () => string;
+      updateAge: (age: number) => void;
+      deleteUser: () => boolean;
+    };
+    type PickFunctionProperty<T> = {
+      [K in keyof T]: T[K] extends (...args: [any]) => any ? K : never;
+    }[keyof T];
+    type newUser3 = PickFunctionProperty<User1>;
+  }
 }
 
 {
